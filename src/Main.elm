@@ -14,19 +14,54 @@ makeGrey x =
 
 
 lightGrey =
-    makeGrey 0.9
+    makeGrey 0.7
 
 
 grey =
-    makeGrey 0.8
+    makeGrey 0.5
 
 
 darkGrey =
-    makeGrey 0.7
+    makeGrey 0.3
 
 
 black =
     makeGrey 0
+
+
+
+-- block
+
+
+blockSize =
+    70
+
+
+halfBlockSize =
+    blockSize // 2
+
+
+roundedness =
+    blockSize // 5
+
+
+blockStyle =
+    [ Background.color darkGrey
+    , Border.color lightGrey
+    , Border.widthEach
+        { bottom = 0
+        , left = 2
+        , right = 0
+        , top = 2
+        }
+    , Border.rounded roundedness
+    , width <| px blockSize
+    , height <| px blockSize
+    ]
+
+
+block =
+    el blockStyle none
 
 
 
@@ -36,7 +71,16 @@ black =
 main =
     layout
         [ Font.color grey
+        , Font.size halfBlockSize
         , Background.color black
+        , padding roundedness
         ]
     <|
-        text "The Beginning"
+        column
+            [ spacing roundedness
+            , centerX
+            ]
+            [ el [ centerX ] <| text "The Beginning"
+            , row [] <| List.repeat 7 block
+            , row [ spacing halfBlockSize ] <| List.repeat 5 block
+            ]
