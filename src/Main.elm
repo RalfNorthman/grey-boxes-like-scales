@@ -95,33 +95,24 @@ type Row
     | Spaced
 
 
-myRow : Row -> Int -> Element msg
-myRow rowType number =
+makeRow : Row -> Int -> Element msg
+makeRow rowType number =
     let
-        denseRow : Int -> Element msg
-        denseRow int =
+        rowHelper : Int -> Int -> Element msg
+        rowHelper space many =
             row
                 [ centerX
-                , spacing -fifthBlockSize
+                , spacing space
                 ]
             <|
-                List.repeat int block
-
-        spacedRow : Int -> Element msg
-        spacedRow int =
-            row
-                [ centerX
-                , spacing fifthBlockSize
-                ]
-            <|
-                List.repeat int block
+                List.repeat many block
     in
         case rowType of
             Dense ->
-                denseRow number
+                rowHelper -fifthBlockSize number
 
             Spaced ->
-                spacedRow number
+                rowHelper fifthBlockSize number
 
 
 makeColumn : List Int -> List Int -> List (Element msg)
@@ -144,7 +135,7 @@ makeColumn sameList manyList =
                 |> List.indexedMap listFragment
                 |> List.concat
     in
-        List.map2 myRow rowTypes manyList
+        List.map2 makeRow rowTypes manyList
 
 
 sameInARow : List Int
